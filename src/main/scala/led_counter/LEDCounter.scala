@@ -10,7 +10,7 @@ class LEDCounter extends RawModule {
 		val LED = Output(UInt(8.W))
 	})
 
-	withClockAndReset(io.CLOCK_50, io.KEY(0)) {
+	withClockAndReset(io.CLOCK_50, !io.KEY(0)) {
 		val counter = RegInit(0.U(26.W))
 		val LED = RegInit(0.U(8.W))
 
