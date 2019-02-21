@@ -64,20 +64,22 @@ class Buzzer extends RawModule {
 		val KEY = Input(UInt(2.W))
 		//val BUZZER = Output(Bool())
 		val BUTTON = Input(UInt(3.W))
-		val OUT = Output(UInt(8.W))
+		val OUT = Output(UInt(3.W))
 	})
 
 	withClockAndReset(io.CLOCK_50, !io.KEY(0)) {
-		//val C = Module(new SquareGen(50000000, 261.62))
-		//val E = Module(new SquareGen(50000000, 329.62))
-		//val G = Module(new SquareGen(50000000, 391.99))
+		val C = Module(new SquareGen(50000000, 261.62))
+		val E = Module(new SquareGen(50000000, 329.62))
+		val G = Module(new SquareGen(50000000, 391.99))
 
-		val sin = Module(new SinGen(in=50000000, out=440, width=8))
+		//val sin = Module(new SinGen(in=50000000, out=440, width=8))
 
 		//val out = (C.io.out & !io.BUTTON(0)) | (E.io.out & io.BUTTON(1)) | (G.io.out & io.BUTTON(2))
 
-		//io.BUZZER := out
-		io.OUT := sin.io.out
+		io.OUT := 0.U
+			.bitSet(0.U, C.io.out & !io.BUTTON(0))
+			.bitSet(1.U, E.io.out & io.BUTTON(1))
+			.bitSet(2.U, G.io.out & io.BUTTON(2))
 	}
 }
 
